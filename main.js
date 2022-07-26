@@ -1,5 +1,6 @@
 import './style.css';
-import {Map, View} from 'ol';
+import {Map, Tile, View} from 'ol';
+// import OSM from 'ol/source/OSM'
 import Stamen from 'ol/source/Stamen';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
@@ -8,30 +9,40 @@ import {Icon, Style} from 'ol/style';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import { fromLonLat } from 'ol/proj';
 
-function createStyle(src, img) {
-  return new Style({
-    image: new Icon({
+
+
+const iconFeature = new Feature({
+  geometry: new Point(
+    fromLonLat([-66.119412,-17.388694])
+    ),
+    name:'Point',
+    population: 4000,
+    rainfall: 500
+});
+const iconStyle = new Style({
+  image: new Icon({
       anchor: [0.5, 0.96],
-      crossOrigin: 'anonymous',
-      src: src,
-      img: img,
-      imgSize: img ? [img.width, img.height] : undefined,
+      anchorXUnits: 'fraction',
+      anchorYUnits: 'pixels',
+      src: 'https://openlayers.org/en/latest/examples/data/icon.png'
     }),
   });
-}
 
-const iconFeature = new Feature(
-  new Point([0, 0])
-  );
-iconFeature.set(
-  'style', createStyle(
-    'data/icon.png', undefined
-    )
-  );
+iconFeature.setStyle(iconStyle);
+
+const vectorSource = new VectorSource({
+  features: [iconFeature]
+});
+//nose si tiene que ser new Vector ({})
+const vectorLayer = new VectorLayer({
+  source: vectorSource
+});
 
 const map = new Map({
   layers: [
-    
+    // new Tile({
+    //   source:new OSM()
+    // }),
     new TileLayer({
       source: new Stamen({
         layer: 'watercolor'
@@ -49,7 +60,8 @@ const map = new Map({
       source: new VectorSource({
         features: [iconFeature]
       }),
-    })
+    }),
+    vectorLayer
   ],
   target: document.getElementById('map'),
   view: new View({
