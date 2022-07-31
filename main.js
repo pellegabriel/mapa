@@ -13,9 +13,9 @@ import { fromLonLat } from 'ol/proj';
 
 const iconFeature = new Feature({
   geometry: new Point(
-    fromLonLat([-66.119412,-17.388694])
+    fromLonLat([-57.950069225014374, -34.914163405860094])
     ),
-    name:'Point',
+    name:'Barril',
     population: 4000,
     rainfall: 500
 });
@@ -24,7 +24,7 @@ const iconStyle = new Style({
       anchor: [0.5, 0.96],
       anchorXUnits: 'fraction',
       anchorYUnits: 'pixels',
-      src: 'https://openlayers.org/en/latest/examples/data/icon.png'
+      src: './barril.png'
     }),
   });
 
@@ -38,19 +38,15 @@ const vectorLayer = new VectorLayer({
   source: vectorSource
 });
 
+
 const map = new Map({
   layers: [
     // new Tile({
     //   source:new OSM()
-    // }),
+    // }),    
     new TileLayer({
       source: new Stamen({
-        layer: 'watercolor'
-      })
-    }),    
-    new TileLayer({
-      source: new Stamen({
-        layer: 'terrain-labels',
+        layer: 'toner'
       }),
     }),
     new VectorLayer({
