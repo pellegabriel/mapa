@@ -9,26 +9,43 @@ import { Icon, Style } from "ol/style";
 import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
 import { fromLonLat } from "ol/proj";
 
-const iconFeature = new Feature({
-  geometry: new Point(fromLonLat([-57.950069225014374, -34.914163405860094])),
-  name: "Barril",
-  population: 4000,
-  rainfall: 500,
-});
+const gasStations = [
+  {name: "la YPF", lon: -57.915626844862324, lat: -34.91510065692611},
+  {name: "la YPF", lon: -57.94647056660717, lat: -34.92041928644089},
+  {name: "la YPF", lon: -57.96823692286914, lat: -34.89954399776112},
+  {name: "la YPF", lon: -57.95100007881291, lat: -34.91513994316877},
+  {name: "la YPF", lon: -57.93533877016539, lat: -34.93488378522299},
+  {name: "la YPF", lon: -57.926944254794634, lat: -34.906359966059185},
+  {name: "la YPF", lon: -57.95485193032597, lat: -34.88635172721391} 
+];
+
 const iconStyle = new Style({
   image: new Icon({
-    anchor: [0.5, 0.96],
-    anchorXUnits: "pixels",
-    anchorYUnits: "pixels",
+    anchor: [0.5, 0.5],
+    anchorXUnits: "fraction",
+    anchorYUnits: "fraction",
     src: "./barril.png",
-    srcimgSize: [200, 200],
+    scale: 0.1
   }),
 });
 
-iconFeature.setStyle(iconStyle);
+
+const iconFeatures = gasStations.map(({name, lon, lat}) => {
+
+  const iconFeature = new Feature({
+    name: ({name}),
+    geometry: new Point(fromLonLat([lon, lat])),
+    name
+  });
+  
+  iconFeature.setStyle(iconStyle);
+
+  return iconFeature
+})
+
 
 const vectorSource = new VectorSource({
-  features: [iconFeature],
+  features: iconFeatures,
 });
 //nose si tiene que ser new Vector ({})
 const vectorLayer = new VectorLayer({
@@ -48,10 +65,7 @@ const map = new Map({
     new VectorLayer({
       style: function (feature) {
         return feature.get("style");
-      },
-      source: new VectorSource({
-        features: [iconFeature],
-      }),
+      }
     }),
     vectorLayer,
   ],
@@ -59,7 +73,7 @@ const map = new Map({
   view: new View({
     center: fromLonLat([-57.950069225014374, -34.914163405860094]),
     zoom: 14,
-    minZoom: 9,
+    minZoom: 12,
     maxZoom: 20,
   }),
 });
