@@ -8,6 +8,7 @@ import VectorSource from "ol/source/Vector";
 import { Icon, Style } from "ol/style";
 import { Tile as TileLayer, Vector as VectorLayer } from "ol/layer";
 import { fromLonLat } from "ol/proj";
+import Overlay from "ol/Overlay";
 
 const gasStations = [
   {name: "la YPF", lon: -57.915626844862324, lat: -34.91510065692611},
@@ -34,8 +35,7 @@ const iconFeatures = gasStations.map(({name, lon, lat}) => {
 
   const iconFeature = new Feature({
     name: ({name}),
-    geometry: new Point(fromLonLat([lon, lat])),
-    name
+    geometry: new Point(fromLonLat([lon, lat]))
   });
   
   iconFeature.setStyle(iconStyle);
@@ -77,4 +77,32 @@ const map = new Map({
     maxZoom: 20,
   }),
 });
+
+const element = document.getElementById('popup');
+
+const popup= new Overlay ({
+  element: element,
+  positioning: 'bottom-center',
+  stopEvent: false,
+});
+map.addOverlay(popup);
+
+map.on('click',function (evt) {
+  const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature){
+    return feature;
+  });
+  if (feature){
+    popup.setPosition(evt.coordinate);
+    $(element).popover({
+      placement:'top',
+      html: true,
+      content: feature.get('name'),
+    });
+    $(element).popover('show');
+  }else{
+    $(element).popover('dispose');
+  }
+});
+
 export default Map;
+
