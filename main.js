@@ -99,10 +99,14 @@ map.on('click',function (evt) {
       content: feature.get('name'),
     });
     $(element).popover('show');
-  }else{
+  } else {
     $(element).popover('dispose');
   }
 });
 
-export default Map;
-
+// change mouse cursor when over marker
+map.on('pointermove', function (e) {
+  const pixel = map.getEventPixel(e.originalEvent);
+  const hit = map.hasFeatureAtPixel(pixel);
+  map.getTarget().style.cursor = hit ? 'pointer' : '';
+});
