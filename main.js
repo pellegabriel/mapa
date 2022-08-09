@@ -88,22 +88,14 @@ const popup= new Overlay ({
 map.addOverlay(popup);
 
 map.on('click',function (evt) {
-  console.log ('evt', evt)
   const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature){
-    console.log('feature', feature)
-    console.log(feature["values_"].name)
     return feature;
   });
   if (feature){
-    popup.setPosition(evt.coordinate);
-    //$(element).popover({
-      //placement:'top',
-      //html: true,
-      //content: feature.get('name'),
-    //});
-    //$(element).popover('show');
-  } else {
-    //$(element).popover('dispose');
+    var element2 = document.createElement('div')
+    element2.innerHTML=`<h2 class="gasStationName">${feature['values_'].name.name}</h2>`
+    popup.setElement(element2)
+    popup.setPosition(evt.coordinate)
   }
 });
 
