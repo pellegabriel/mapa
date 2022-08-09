@@ -79,7 +79,7 @@ const map = new Map({
 });
 
 const element = document.getElementById('popup');
-
+console.log('element', )
 const popup= new Overlay ({
   element: element,
   positioning: 'bottom-center',
@@ -88,19 +88,22 @@ const popup= new Overlay ({
 map.addOverlay(popup);
 
 map.on('click',function (evt) {
+  console.log ('evt', evt)
   const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature){
+    console.log('feature', feature)
+    console.log(feature["values_"].name)
     return feature;
   });
   if (feature){
     popup.setPosition(evt.coordinate);
-    $(element).popover({
-      placement:'top',
-      html: true,
-      content: feature.get('name'),
-    });
-    $(element).popover('show');
+    //$(element).popover({
+      //placement:'top',
+      //html: true,
+      //content: feature.get('name'),
+    //});
+    //$(element).popover('show');
   } else {
-    $(element).popover('dispose');
+    //$(element).popover('dispose');
   }
 });
 
