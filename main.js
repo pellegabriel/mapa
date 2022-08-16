@@ -1,6 +1,5 @@
-import "./style.css";
-import { Map, Tile, View } from "ol";
-// import OSM from 'ol/source/OSM'
+import "./css/style.css";
+import { Map, View } from "ol";
 import Stamen from "ol/source/Stamen";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
@@ -28,80 +27,98 @@ const iconStyle = new Style({
     src: "./barril.png",
     scale: 0.1
   }),
-});
-
-
-const iconFeatures = gasStations.map(({name, lon, lat}) => {
-
-  const iconFeature = new Feature({
-    name: ({name}),
-    geometry: new Point(fromLonLat([lon, lat]))
-  });
-  
-  iconFeature.setStyle(iconStyle);
-
-  return iconFeature
 })
 
 
-const vectorSource = new VectorSource({
-  features: iconFeatures,
-});
-//nose si tiene que ser new Vector ({})
-const vectorLayer = new VectorLayer({
-  source: vectorSource,
-});
+const iconFeatures = gasStations.map(
+  ({name, lon, lat}) => {
 
-const map = new Map({
-  layers: [
-    // new Tile({
-    //   source:new OSM()
-    // }),
-    new TileLayer({
-      source: new Stamen({
-        layer: "toner",
+    const iconFeature = new Feature({
+      name: ({name}),
+      geometry: 
+        new Point(
+          fromLonLat([lon, lat])
+        )
+    })
+    
+    iconFeature.setStyle(iconStyle);
+
+    return iconFeature
+  }
+)
+
+
+const vectorSource = 
+  new VectorSource({
+    features: iconFeatures,
+  })
+
+const vectorLayer = 
+  new VectorLayer({
+    source: vectorSource,
+  })
+
+const map = 
+  new Map({
+    layers: [
+      new TileLayer({
+        source: new Stamen({
+          layer: "toner",
+        }),
       }),
+      new VectorLayer({
+        style: function (feature) {
+          return feature.get("style");
+        }
+      }),
+      vectorLayer,
+    ],
+    target: document.getElementById("map"),
+    view: new View({
+      center: fromLonLat([-57.950069225014374, -34.914163405860094]),
+      zoom: 14,
+      minZoom: 12,
+      maxZoom: 20,
     }),
-    new VectorLayer({
-      style: function (feature) {
-        return feature.get("style");
-      }
-    }),
-    vectorLayer,
-  ],
-  target: document.getElementById("map"),
-  view: new View({
-    center: fromLonLat([-57.950069225014374, -34.914163405860094]),
-    zoom: 14,
-    minZoom: 12,
-    maxZoom: 20,
-  }),
-});
+  })
 
-const element = document.getElementById('popup');
-console.log('element', )
-const popup= new Overlay ({
-  element: element,
-  positioning: 'bottom-center',
-  stopEvent: false,
-});
+const element = 
+  document.getElementById('popup')
+
+const popup = 
+  new Overlay ({
+    element: element,
+    positioning: 'bottom-center',
+    stopEvent: false,
+  });
 map.addOverlay(popup);
 
-map.on('click',function (evt) {
-  const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature){
-    return feature;
+map.on(
+  'click',function (evt) {
+    const feature = 
+      map.forEachFeatureAtPixel(
+        evt.pixel, function (feature){
+          return feature;
+        }
+      )
+    if (feature){
+      var element2 = 
+        document.createElement('div')
+      element2.innerHTML=
+        `<h2 class="gasStationName">
+          ${feature['values_'].name.name}
+        </h2>`
+      popup.setElement(element2)
+      popup.setPosition(evt.coordinate)
+    }
   });
-  if (feature){
-    var element2 = document.createElement('div')
-    element2.innerHTML=`<h2 class="gasStationName">${feature['values_'].name.name}</h2>`
-    popup.setElement(element2)
-    popup.setPosition(evt.coordinate)
-  }
-});
 
-// change mouse cursor when over marker
-map.on('pointermove', function (e) {
-  const pixel = map.getEventPixel(e.originalEvent);
-  const hit = map.hasFeatureAtPixel(pixel);
-  map.getTarget().style.cursor = hit ? 'pointer' : '';
-});
+map.on(
+  'pointermove', function (e) {
+    const pixel = 
+      map.getEventPixel(e.originalEvent)
+    const hit = 
+      map.hasFeatureAtPixel(pixel)
+    map.getTarget().style.cursor = 
+      hit ? 'pointer' : ''
+})
