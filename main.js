@@ -20,7 +20,7 @@ const gasStations = [
   {name: "la YPF", lon: -57.95485193032597, lat: -34.88635172721391} 
 ];
 
-const iconStyle = new Style({
+const iconStyle = new Style ({
   image: new Icon({
     anchor: [0.5, 0.5],
     anchorXUnits: "fraction",
