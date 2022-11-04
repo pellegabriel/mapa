@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "jquery": "^3.6.0",
-    "ol": "latest",
-    "vite": "^3.0.4"
+    "ol": "^7.1.0",
+    "vite": "^3.2.2"
   }
 }
