@@ -1,6 +1,5 @@
 import "./style.css";
 import { Map, Tile, View } from "ol";
-// import OSM from 'ol/source/OSM'
 import Stamen from "ol/source/Stamen";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
@@ -25,7 +24,7 @@ const iconStyle = new Style ({
     anchor: [0.5, 0.5],
     anchorXUnits: "fraction",
     anchorYUnits: "fraction",
-    src: "./barril.png",
+    src: "./sprite/barril.png",
     scale: 0.1
   }),
 });
@@ -47,7 +46,7 @@ const iconFeatures = gasStations.map(({name, lon, lat}) => {
 const vectorSource = new VectorSource({
   features: iconFeatures,
 });
-//nose si tiene que ser new Vector ({})
+
 const vectorLayer = new VectorLayer({
   source: vectorSource,
 });
