@@ -78,7 +78,6 @@ const map = new Map({
 });
 
 const element = document.getElementById('popup');
-console.log('element', )
 const popup= new Overlay ({
   element: element,
   positioning: 'bottom-center',
