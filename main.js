@@ -1,5 +1,5 @@
 import "./style.css";
-import { Map, Tile, View } from "ol";
+import { Map, View } from "ol";
 import Stamen from "ol/source/Stamen";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
